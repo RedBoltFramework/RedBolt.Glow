@@ -14,9 +14,7 @@ using System.IO;
 
 using Microsoft.Extensions.Logging;
 
-using RedBolt.Core;
 using RedBolt.Editor.Core;
-using RedBolt.Graphics;
 using RedBolt.Logging;
 using RedBolt.Resource;
 using RedBolt.Utility;
@@ -25,39 +23,30 @@ using EditorProject = RedBolt.Editor.Project.Project;
 using ProjectFlag = RedBolt.Editor.Project.ProjectFlag;
 
 /// <summary>Developer-only Glow reflection, resources, and asset-pipeline integration.</summary>
-public sealed class GlowEditorPlugin : PluginApplication
+public sealed class GlowEditorPlugin : EditorPluginApplication
 {
-    protected override void Load()
+    protected override void LoadEditorPlugin()
     {
-        _glowReflection = Context.RegisterAssemblyScoped(typeof(LightBaker).Assembly);
-        _toolsReflection = Context.RegisterAssemblyScoped(typeof(GenerateLightmapUVTransformer).Assembly);
-
-        var assemblyDirectory = Path.GetDirectoryName(typeof(GlowEditorPlugin).Assembly.Location)!;
-        var resourcesPath = Path.Combine(assemblyDirectory, "GlowCoreData");
+        var resourcesPath = GetPluginPath("GlowCoreData");
         var cache = GetSubsystem<ResourceCache>();
         if (Directory.Exists(resourcesPath) && cache.AddResourceDir(resourcesPath))
             _resourcesPath = resourcesPath;
-
-        _registration = GetSubsystem<EditorPluginManager>().AddScopedPlugin<EditorProject>(
-            "Glow.DefaultLightmapUVTransformer", ApplyProject);
     }
 
-    protected override void Unload()
+    protected override void UnloadEditorPlugin()
     {
-        _registration?.Dispose();
-        _registration = null;
-
         if (_resourcesPath is not null)
             GetSubsystem<ResourceCache>().RemoveResourceDir(_resourcesPath);
         _resourcesPath = null;
-
-        _toolsReflection?.Dispose();
-        _toolsReflection = null;
-        _glowReflection?.Dispose();
-        _glowReflection = null;
     }
 
-    private static IDisposable ApplyProject(EditorProject project)
+    private string? _resourcesPath;
+}
+
+[EditorExtension("Glow.DefaultLightmapUVTransformer")]
+internal static class GlowDefaultLightmapUVTransformerExtension
+{
+    public static IDisposable Apply(EditorProject project)
     {
         if ((project.Flags & ProjectFlag.ReadOnly) == 0)
         {
@@ -78,9 +67,4 @@ public sealed class GlowEditorPlugin : PluginApplication
 
         return project.RegisterDefaultAssetTransformer<GenerateLightmapUVTransformer>();
     }
-
-    private IDisposable? _registration;
-    private AssemblyRegistration? _toolsReflection;
-    private AssemblyRegistration? _glowReflection;
-    private string? _resourcesPath;
 }
