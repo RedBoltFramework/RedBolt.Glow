@@ -1,0 +1,17 @@
+{
+  "version": 6,
+  "cmakeMinimumRequired": { "major": 3, "minor": 28, "patch": 0 },
+  "configurePresets": [
+    {
+      "name": "linux-x64",
+      "generator": "Ninja Multi-Config",
+      "binaryDir": "${sourceDir}/build/native/${presetName}"
+    },
+    {
+      "name": "win-x64",
+      "generator": "Ninja Multi-Config",
+      "binaryDir": "${sourceDir}/build/native/${presetName}",
+      "cacheVariables": { "CMAKE_TOOLCHAIN_FILE": "${sourceDir}/../RedBolt/cmake/Toolchains/MinGW-x86_64.cmake" }
+    }
+  ]
+}

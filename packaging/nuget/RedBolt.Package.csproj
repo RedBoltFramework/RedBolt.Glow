@@ -1,0 +1,8 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <RedBoltExternalPackageProjectUrl>https://github.com/RedBoltFramework/RedBolt.Glow</RedBoltExternalPackageProjectUrl>
+    <RedBoltExternalPackageRepositoryUrl>https://github.com/RedBoltFramework/RedBolt.Glow.git</RedBoltExternalPackageRepositoryUrl>
+    <RedBoltExternalPackageTags>RedBolt game-engine csharp dotnet lightmap baking global-illumination</RedBoltExternalPackageTags>
+  </PropertyGroup>
+  <Import Project="../../../RedBolt/src/RedBolt/Build/NuGetPackage.targets" />
+</Project>
