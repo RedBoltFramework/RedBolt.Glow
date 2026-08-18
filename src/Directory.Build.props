@@ -13,7 +13,6 @@ For a copy, see <https://opensource.org/licenses/MIT> or the accompanying LICENS
     <RedBoltEditorEnabled>true</RedBoltEditorEnabled>
     <RedBoltExternalModuleRoot>$(RedBoltGlowRoot)</RedBoltExternalModuleRoot>
     <RedBoltExternalModuleName>RedBolt.Glow</RedBoltExternalModuleName>
-    <RedBoltExternalBuildProjectName>RedBolt.Glow.Build</RedBoltExternalBuildProjectName>
     <RedBoltExternalGeneratorProjectName>RedBolt.Glow.Generator.Dependencies</RedBoltExternalGeneratorProjectName>
     <RedBoltExternalGeneratorProjectPrefix>RedBolt.Glow.Generator.</RedBoltExternalGeneratorProjectPrefix>
     <RedBoltExternalModuleProjectNames>RedBolt.Glow;RedBolt.Glow.Tools;RedBolt.Glow.Editor;RedBolt.Bindings.XAtlas;RedBolt.Bindings.Embree</RedBoltExternalModuleProjectNames>
@@ -26,6 +25,5 @@ For a copy, see <https://opensource.org/licenses/MIT> or the accompanying LICENS
   <Import Project="$(RedBoltRoot)/src/RedBolt/Build/Directory.Build.props" />
   <PropertyGroup>
     <RedBoltExternalModuleEnabled>$(RedBoltGlowEnabled)</RedBoltExternalModuleEnabled>
-    <RedBoltExternalModuleBuildProperties>RedBoltGlowEnabled=$(RedBoltGlowEnabled)</RedBoltExternalModuleBuildProperties>
   </PropertyGroup>
 </Project>
