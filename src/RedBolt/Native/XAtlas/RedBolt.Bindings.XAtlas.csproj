@@ -11,6 +11,8 @@ For a copy, see <https://opensource.org/licenses/MIT> or the accompanying LICENS
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <DisableRuntimeMarshalling>true</DisableRuntimeMarshalling>
     <RedBoltExternalCMakeTarget>redbolt-glow-native-xatlas</RedBoltExternalCMakeTarget>
+    <RedBoltExternalBindingsSubdirectory>xatlas</RedBoltExternalBindingsSubdirectory>
+    <RedBoltExternalBindingsProjectName>RedBolt.Bindings.XAtlas</RedBoltExternalBindingsProjectName>
   </PropertyGroup>
 
   <ItemGroup Condition="'$(RedBoltGeneratedBindingsDir)' != '' and Exists('$(RedBoltGeneratedBindingsDir)/xatlas')">
