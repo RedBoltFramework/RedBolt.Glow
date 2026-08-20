@@ -5,25 +5,22 @@ For a copy, see <https://opensource.org/licenses/MIT> or the accompanying LICENS
 -->
 
 <Project>
+  <!--
+    Module project evaluation. Native module with generator, bindings, and exact native targets.
+  -->
   <PropertyGroup>
     <RedBoltGlowRoot>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..'))</RedBoltGlowRoot>
     <RedBoltRoot Condition="'$(RedBoltRoot)' == ''">$([System.IO.Path]::GetFullPath('$(RedBoltGlowRoot)/../RedBolt'))</RedBoltRoot>
-    <RedBoltUtilityEnabled>true</RedBoltUtilityEnabled>
-    <RedBoltDearImGuiEnabled>true</RedBoltDearImGuiEnabled>
-    <RedBoltEditorEnabled>true</RedBoltEditorEnabled>
     <RedBoltExternalModuleRoot>$(RedBoltGlowRoot)</RedBoltExternalModuleRoot>
     <RedBoltExternalModuleName>RedBolt.Glow</RedBoltExternalModuleName>
     <RedBoltExternalGeneratorProjectName>RedBolt.Glow.Generator.Dependencies</RedBoltExternalGeneratorProjectName>
     <RedBoltExternalGeneratorProjectPrefix>RedBolt.Glow.Generator.</RedBoltExternalGeneratorProjectPrefix>
-    <RedBoltExternalModuleProjectNames>RedBolt.Glow;RedBolt.Glow.Tools;RedBolt.Glow.Editor;RedBolt.Bindings.XAtlas;RedBolt.Bindings.Embree</RedBoltExternalModuleProjectNames>
     <RedBoltExternalGeneratedBindingsDirectory>redbolt-glow-native</RedBoltExternalGeneratedBindingsDirectory>
     <RedBoltExternalHasNative>true</RedBoltExternalHasNative>
+    <RedBoltAndroidSupported>false</RedBoltAndroidSupported>
     <RedBoltExternalNativeTargetPrefix>redbolt-glow</RedBoltExternalNativeTargetPrefix>
     <RedBoltExternalEnabledNativeModules>GLOW</RedBoltExternalEnabledNativeModules>
     <RedBoltExternalDesktopResourceRoot>$(RedBoltGlowRoot)</RedBoltExternalDesktopResourceRoot>
   </PropertyGroup>
-  <Import Project="$(RedBoltRoot)/src/RedBolt/Build/Directory.Build.props" />
-  <PropertyGroup>
-    <RedBoltExternalModuleEnabled>$(RedBoltGlowEnabled)</RedBoltExternalModuleEnabled>
-  </PropertyGroup>
+  <Import Project="$(RedBoltRoot)/eng/RedBolt.ModuleBuild/Directory.Build.props" />
 </Project>

@@ -5,11 +5,12 @@ For a copy, see <https://opensource.org/licenses/MIT> or the accompanying LICENS
 -->
 
 <Project>
+  <!-- Module solution entry point: declares itself as an external module and chains to the core solution props. -->
   <PropertyGroup>
     <RedBoltGlowRoot>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory).'))</RedBoltGlowRoot>
     <RedBoltRoot Condition="'$(RedBoltRoot)' == ''">$([System.IO.Path]::GetFullPath('$(RedBoltGlowRoot)/../RedBolt'))</RedBoltRoot>
     <RedBoltExternalModuleRoot>$(RedBoltGlowRoot)</RedBoltExternalModuleRoot>
     <RedBoltExternalModuleName>RedBolt.Glow</RedBoltExternalModuleName>
   </PropertyGroup>
-  <Import Project="$(RedBoltRoot)/src/RedBolt/Build/Directory.Solution.props" />
+  <Import Project="$(RedBoltRoot)/eng/RedBolt.ModuleBuild/Directory.Solution.props" />
 </Project>

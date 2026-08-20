@@ -9,7 +9,6 @@ For a copy, see <https://opensource.org/licenses/MIT> or the accompanying LICENS
     <Project Path="src/RedBolt/Generator/Dependencies/RedBolt.Glow.Generator.Dependencies.csproj" />
   </Folder>
   <Folder Name="/src/RedBolt/Native/">
-    <Project Path="src/RedBolt/Native/RedBolt.Glow.Native.csproj" />
     <Project Path="src/RedBolt/Native/XAtlas/RedBolt.Bindings.XAtlas.csproj" />
     <Project Path="src/RedBolt/Native/Embree/RedBolt.Bindings.Embree.csproj" />
   </Folder>

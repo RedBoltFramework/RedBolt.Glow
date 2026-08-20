@@ -2,7 +2,7 @@
 // This work is licensed under the terms of the MIT license.
 // For a copy, see <https://opensource.org/licenses/MIT> or the accompanying LICENSE file.
 
-#:project ../../../RedBolt/src/RedBolt/Build/Packaging/RedBolt.ExternalModule.Packaging.csproj
+#:project ../../../RedBolt/eng/RedBolt.ModuleBuild/Packaging/RedBolt.ExternalModule.Packaging.csproj
 
 using System.Runtime.CompilerServices;
 using RedBolt.ExternalModule.Packaging;
@@ -16,13 +16,12 @@ return ExternalModulePackager.Run(args, new ExternalModulePackageManifest
     DefaultRids = ["linux-x64"],
     BuildSteps =
     [
-        new("Native/RedBolt.Glow.Native.csproj", BuildWhen.Linux),
         new("Native/XAtlas/RedBolt.Bindings.XAtlas.csproj", BuildWhen.Linux, true),
         new("Native/Embree/RedBolt.Bindings.Embree.csproj", BuildWhen.Linux, true),
         new("Glow/RedBolt.Glow.csproj", BuildWhen.Linux, true, "-p:BuildProjectReferences=false"),
         new("Glow.Tools/RedBolt.Glow.Tools.csproj", BuildWhen.Linux, true, "-p:BuildProjectReferences=false"),
         new("Glow/RedBolt.Glow.csproj", BuildWhen.Windows, false,
-            "-p:RedBoltPlatform=win-x64", "-p:RedBoltNativePreset=win-x64")
+            "-p:RedBoltPlatform=win-x64")
     ],
     ResourcePackages =
     [
