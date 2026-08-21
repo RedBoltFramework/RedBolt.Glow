@@ -6,7 +6,7 @@
 - `src/RedBolt/Glow.Tools` owns asset-pipeline lightmap UV generation.
 - `src/RedBolt/Glow.Editor` is the optional process-resident Editor companion.
 - `src/RedBolt/Sample/BakedLighting` is the module-owned baking sample.
-- `bin/CoreData` contains shipping Glow resources; `bin/Data` contains module test data.
+- `bin/CoreData.Glow` contains shipping Glow resources; `bin/Data.Glow` contains module test data.
 
 Keep RedBolt Core independent from Glow. Do not add a Glow abstraction layer: runtime users reference Glow directly and Editor integration belongs in the companion plugin.
 

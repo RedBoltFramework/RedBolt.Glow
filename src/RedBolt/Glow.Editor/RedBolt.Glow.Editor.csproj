@@ -24,7 +24,7 @@ For a copy, see <https://opensource.org/licenses/MIT> or the accompanying LICENS
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="../../../bin/CoreData/**/*">
+    <Content Include="../../../bin/CoreData.Glow/**/*">
       <Link>GlowCoreData/%(RecursiveDir)%(Filename)%(Extension)</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

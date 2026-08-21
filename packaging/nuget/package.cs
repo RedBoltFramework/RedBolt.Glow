@@ -25,7 +25,7 @@ return ExternalModulePackager.Run(args, new ExternalModulePackageManifest
     ],
     ResourcePackages =
     [
-        new("RedBolt.Glow.CoreData", "CoreData", "bin/CoreData")
+        new("RedBolt.Glow.CoreData", "CoreData.Glow", "bin/CoreData.Glow")
     ],
     ManagedPackages =
     [
