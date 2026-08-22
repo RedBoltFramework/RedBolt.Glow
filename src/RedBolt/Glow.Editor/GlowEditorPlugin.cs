@@ -11,37 +11,19 @@ using RedBolt.Plugins;
 namespace RedBolt.Glow.Editor;
 
 using System;
-using System.IO;
 
 using Microsoft.Extensions.Logging;
 
 using RedBolt.Editor.Core;
 using RedBolt.Logging;
-using RedBolt.Resource;
 using RedBolt.Utility;
 
 using EditorProject = RedBolt.Editor.Project.Project;
 using ProjectFlag = RedBolt.Editor.Project.ProjectFlag;
 
-/// <summary>Developer-only Glow reflection, resources, and asset-pipeline integration.</summary>
+/// <summary>Developer-only Glow reflection and asset-pipeline integration.</summary>
 public sealed class GlowEditorPlugin : EditorPluginApplication
 {
-    protected override void LoadEditorPlugin()
-    {
-        var resourcesPath = GetPluginPath("GlowCoreData");
-        var cache = GetSubsystem<ResourceCache>();
-        if (Directory.Exists(resourcesPath) && cache.AddResourceDir(resourcesPath))
-            _resourcesPath = resourcesPath;
-    }
-
-    protected override void UnloadEditorPlugin()
-    {
-        if (_resourcesPath is not null)
-            GetSubsystem<ResourceCache>().RemoveResourceDir(_resourcesPath);
-        _resourcesPath = null;
-    }
-
-    private string? _resourcesPath;
 }
 
 [EditorExtension("Glow.DefaultLightmapUVTransformer")]
