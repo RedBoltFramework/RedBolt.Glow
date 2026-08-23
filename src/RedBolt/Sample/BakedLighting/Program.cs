@@ -208,7 +208,7 @@ public class BakedLighting : Application
         parameters.ApplicationName = "RedBolt.Sample.BakedLighting";
         parameters.Borderless = false;
         parameters.FullScreen = false;
-        parameters.ResourcePaths = "CoreData.Glow;Data.Glow;CoreData;Data";
+        parameters.ResourcePaths = "CoreData.Glow;SampleData.Glow;CoreData;SampleData";
         parameters.ResourcePrefixPaths = ".;..";
         parameters.WindowMaximize = false;
 #if !REDBOLT_PLATFORM_BROWSER

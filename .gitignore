@@ -26,9 +26,9 @@ bin/
 bin/*
 !bin/CoreData/
 !bin/CoreData/**
-!bin/Data/
-!bin/Data/**
-bin/Data/Models/
+!bin/SampleData.Glow/
+!bin/SampleData.Glow/**
+bin/SampleData.Glow/Models/
 obj/
 
 # Editor and OS noise.
