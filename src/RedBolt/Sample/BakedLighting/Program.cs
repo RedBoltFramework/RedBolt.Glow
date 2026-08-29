@@ -16,6 +16,7 @@ using RedBolt.Input;
 using RedBolt.Math;
 using RedBolt.Resource;
 using RedBolt.Scene;
+using Widgets = RedBolt.SystemUI.Widgets;
 
 internal static class BakedLightingProgram
 {
@@ -52,11 +53,11 @@ public class BakedLighting : Application
         base.Start();
         Context.RegisterAssembly(typeof(LightBaker).Assembly);
 
-        // Create scene content
-        CreateScene();
-
         // Create the UI content
         CreateInstructions();
+
+        // Create scene content after Dear ImGui so its render pass stays on top.
+        CreateScene();
 
         // Subscribe to necessary events
         SubscribeToEvents();
@@ -81,6 +82,7 @@ public class BakedLighting : Application
         var camera = _scene.FindComponent<Camera>()!;
         _cameraNode = camera.Node!;
         _cameraNode.SetPosition(new Vector3f(0.0f, 0.0f, -8.0f));
+        _cameraDistance = 8.0f;
         _viewport = new Viewport(_scene, camera);
         Renderer.SetViewport(0, _viewport);
 
@@ -103,6 +105,17 @@ public class BakedLighting : Application
         SubscribeToEvent<DearImGuiEvents.EndRenderingDearImGuiEvent>(
             (ref DearImGuiEvents.EndRenderingDearImGuiEvent _) => DrawInstructions());
 
+        _controlPrompts =
+        [
+            Resources.Get<Texture2D>("ThirdParty/KenneyInputPrompts/keyboard_w.png"),
+            Resources.Get<Texture2D>("ThirdParty/KenneyInputPrompts/keyboard_a.png"),
+            Resources.Get<Texture2D>("ThirdParty/KenneyInputPrompts/keyboard_s.png"),
+            Resources.Get<Texture2D>("ThirdParty/KenneyInputPrompts/keyboard_d.png"),
+            Resources.Get<Texture2D>("ThirdParty/KenneyInputPrompts/mouse_move.png"),
+            Resources.Get<Texture2D>("ThirdParty/KenneyInputPrompts/keyboard_shift.png"),
+            Resources.Get<Texture2D>("ThirdParty/KenneyInputPrompts/keyboard_tab.png")
+        ];
+
         // Construct new Text object, set string to display and font to use
         // The text has multiple rows. Center them in relation to each other
         // Position the text relative to the screen center
@@ -113,6 +126,36 @@ public class BakedLighting : Application
     private void SubscribeToEvents()
     {
         // Unsubscribe the SceneUpdate event from base class as the camera node is being controlled in HandlePostUpdate() in this sample
+        SubscribeToEvent<InputEvents.MouseWheelEvent>(HandleMouseWheel);
+        _multitouchAdapter = new MultitouchAdapter();
+        _multitouchAdapter.SetEnabled(true);
+        SubscribeToEvent<InputEvents.MultitouchEvent>(_multitouchAdapter, HandleMultitouch);
+    }
+
+    private void HandleMouseWheel(ref InputEvents.MouseWheelEvent eventData)
+    {
+        ZoomCamera(eventData.Wheel * 0.75f);
+    }
+
+    private void HandleMultitouch(ref InputEvents.MultitouchEvent eventData)
+    {
+        if ((MultitouchEventType)eventData.EventType != MultitouchEventType.MultitouchMove)
+            return;
+
+        if (eventData.NumFingers == 1 && eventData.X >= Graphics.Width / 2)
+        {
+            var sensitivity = 90.0f / Math.Max(1, Graphics.Height);
+            _yaw = MathDefs.Mod(_yaw - eventData.DX * sensitivity, 360.0f);
+            _pitch = MathDefs.Clamp(_pitch - eventData.DY * sensitivity, -89.0f, 89.0f);
+        }
+        else if (eventData.NumFingers == 2)
+            ZoomCamera((eventData.DSize.X + eventData.DSize.Y) * 0.01f);
+    }
+
+    private void ZoomCamera(float amount)
+    {
+        _cameraDistance = MathDefs.Clamp(_cameraDistance - amount, 3.0f, 14.0f);
+        _cameraNode?.SetPosition(new Vector3f(0.0f, 0.0f, -_cameraDistance));
     }
 
     /// <summary>Handle application update. Set controls to character.</summary>
@@ -170,13 +213,18 @@ public class BakedLighting : Application
 
         // Toggle textures
         if (Input.GetKeyPress(Key.Tab))
-        {
-            var animModel = animController.Node.GetComponent<AnimatedModel>()!;
-            _texturesEnabled = !_texturesEnabled;
-            animModel.SetMaterial(_texturesEnabled
-                ? cache.Get<Material>("Models/Mutant/Materials/mutant_M.xml")
-                : cache.Get<Material>("Materials/DefaultWhite.xml"));
-        }
+            ToggleTextures();
+    }
+
+    private void ToggleTextures()
+    {
+        var animModel = _actorNode?.GetComponent<AnimatedModel>();
+        if (animModel is null)
+            return;
+        _texturesEnabled = !_texturesEnabled;
+        animModel.SetMaterial(_texturesEnabled
+            ? Resources.Get<Material>("Models/Mutant/Materials/mutant_M.xml")
+            : Resources.Get<Material>("Materials/DefaultWhite.xml"));
     }
 
     protected override void Stop()
@@ -188,19 +236,46 @@ public class BakedLighting : Application
         _actorNode = null;
         _scene?.Dispose();
         _scene = null;
+        _multitouchAdapter?.Dispose();
+        _multitouchAdapter = null;
         base.Stop();
     }
 
-    private static void DrawInstructions()
+    private void DrawInstructions()
     {
         var windowOpen = true;
+        ImGui.SetNextWindowPos(new Vector2f(10.0f, 10.0f), ImGuiCond.ImGuiCondAlways);
+        ImGui.SetNextWindowSize(new Vector2f(305.0f, 205.0f), ImGuiCond.ImGuiCondAlways);
         if (ImGui.Begin("Baked Lighting"u8, ref windowOpen,
             ImGuiWindowFlags.ImGuiWindowFlagsNoResize | ImGuiWindowFlags.ImGuiWindowFlagsNoSavedSettings))
         {
-            ImGui.TextUnformatted("Use WASD keys and the mouse to move"u8);
-            ImGui.TextUnformatted("Shift to sprint"u8);
+            for (var i = 0; i < 3; ++i)
+            {
+                ImGui.Image(_controlPrompts![i], PromptIconSize);
+                ImGui.SameLine();
+            }
+            DrawPrompt(_controlPrompts![3], "Move"u8);
+            DrawPrompt(_controlPrompts[4], "Look / wheel zoom"u8);
+            DrawPrompt(_controlPrompts[5], "Sprint"u8);
+            DrawPrompt(_controlPrompts[6], "Toggle character textures"u8);
+            if (ImGui.Button("Zoom in"u8))
+                ZoomCamera(0.75f);
+            ImGui.SameLine();
+            if (ImGui.Button("Zoom out"u8))
+                ZoomCamera(-0.75f);
+            ImGui.SameLine();
+            if (ImGui.Button("Textures"u8))
+                ToggleTextures();
         }
         ImGui.End();
+    }
+
+    private static void DrawPrompt(Texture2D texture, ReadOnlySpan<byte> label)
+    {
+        ImGui.Image(texture, PromptIconSize);
+        ImGui.SameLine();
+        Widgets.AlignTextToLastItem();
+        ImGui.TextUnformatted(label);
     }
 
     protected override void Setup(EngineParameters parameters)
@@ -239,5 +314,9 @@ public class BakedLighting : Application
     private Viewport? _viewport;
     private float _yaw;
     private float _pitch;
+    private float _cameraDistance;
     private bool _texturesEnabled = true;
+    private Texture2D[]? _controlPrompts;
+    private MultitouchAdapter? _multitouchAdapter;
+    private static readonly Vector2f PromptIconSize = new(24.0f, 24.0f);
 }
