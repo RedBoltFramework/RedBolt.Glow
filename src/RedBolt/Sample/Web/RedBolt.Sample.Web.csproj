@@ -14,12 +14,10 @@ For a copy, see <https://opensource.org/licenses/MIT> or the accompanying LICENS
   <ItemGroup>
     <!-- <redbolt-generated name="web-project-items"> -->
     <Compile Include="Program.cs" />
-    <ProjectReference Include="../../Glow/RedBolt.Glow.csproj" />
     <ProjectReference Include="../../../../../RedBolt/src/RedBolt/DearImGui/RedBolt.DearImGui.csproj" />
     <Compile Include="../BakedLighting/**/*.cs" Link="Samples/RedBoltGlow/BakedLighting/%(RecursiveDir)%(Filename)%(Extension)" />
     <RedBoltWebResourcePackage Include="RedBolt.Glow.CoreData" SourceDirectory="../../../../bin/CoreData.Glow" />
     <RedBoltWebResourcePackage Include="RedBolt.Glow.SampleData" SourceDirectory="../../../../bin/SampleData.Glow" />
-    <TrimmerRootAssembly Include="RedBolt.Glow" />
     <!-- </redbolt-generated name="web-project-items"> -->
   </ItemGroup>
   <!-- <redbolt-generated name="web-project-import"> -->

@@ -16,7 +16,6 @@ For a copy, see <https://opensource.org/licenses/MIT> or the accompanying LICENS
   <ItemGroup>
     <!-- <redbolt-generated name="android-project-items"> -->
     <Compile Include="Program.cs" />
-    <ProjectReference Include="../../Glow/RedBolt.Glow.csproj" />
     <ProjectReference Include="../../../../../RedBolt/src/RedBolt/DearImGui/RedBolt.DearImGui.csproj" />
     <Compile Include="../BakedLighting/**/*.cs" Link="Samples/RedBoltGlow/BakedLighting/%(RecursiveDir)%(Filename)%(Extension)" />
     <AndroidAsset Include="../../../../bin/CoreData.Glow/**/*" Link="CoreData/%(RecursiveDir)%(Filename)%(Extension)" />
