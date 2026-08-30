@@ -15,6 +15,6 @@
     "bin/SampleData.Glow/**/*"
   ],
   "samples": [
-    { "id": "baked-lighting", "name": "Baked Lighting", "applicationType": "RedBolt.Sample.BakedLighting.BakedLighting", "source": "BakedLighting" }
+    { "id": "baked-lighting", "name": "Baked Lighting", "applicationType": "RedBolt.Sample.BakedLighting.BakedLighting", "source": "BakedLighting", "mobileHelp": "Drag to look. Use the direction pad to move the character.", "mobileMovement": "wasd", "mobileControls": [{"label": "Sprint", "key": "Shift"}, {"label": "Textures", "key": "Tab"}] }
   ]
 }
