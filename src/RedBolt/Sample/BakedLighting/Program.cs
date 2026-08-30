@@ -51,8 +51,6 @@ public class BakedLighting : Application
     {
         // Execute base class startup
         base.Start();
-        Context.RegisterAssembly(typeof(LightBaker).Assembly);
-
         // Create the UI content
         CreateInstructions();
 

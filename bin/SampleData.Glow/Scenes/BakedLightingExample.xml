@@ -8,12 +8,6 @@
 	<attribute name="Variables" />
 	<attribute name="Lightmaps" value="Texture2D;Scenes/BakedLightingExample.xml.d/Textures/Lightmap-0.png;Scenes/BakedLightingExample.xml.d/Textures/Lightmap-1.png" />
 	<component type="Octree" id="1" />
-	<component type="LightBaker" id="3">
-		<attribute name="Quality" value="High" />
-		<attribute name="Direct Samples (Lightmap)" value="32" />
-		<attribute name="Indirect Samples (Texture)" value="256" />
-		<attribute name="Indirect Samples (Light Probes)" value="256" />
-	</component>
 	<component type="GlobalIllumination" id="4">
 		<attribute name="Data File" value="BinaryFile;Scenes/BakedLightingExample.xml.d/GI.bin" />
 	</component>

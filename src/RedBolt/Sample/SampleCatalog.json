@@ -1,0 +1,20 @@
+{
+  "name": "RedBolt.Glow",
+  "applicationId": "org.redbolt.glow.samples",
+  "web": true,
+  "android": true,
+  "native": true,
+  "webNative": false,
+  "projectReferences": [
+    "../RedBolt/src/RedBolt/DearImGui/RedBolt.DearImGui.csproj"
+  ],
+  "coreData": [
+    "bin/CoreData.Glow/**/*"
+  ],
+  "sampleData": [
+    "bin/SampleData.Glow/**/*"
+  ],
+  "samples": [
+    { "id": "baked-lighting", "name": "Baked Lighting", "applicationType": "RedBolt.Sample.BakedLighting.BakedLighting", "source": "BakedLighting" }
+  ]
+}
