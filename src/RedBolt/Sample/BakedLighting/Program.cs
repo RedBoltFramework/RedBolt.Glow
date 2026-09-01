@@ -51,6 +51,12 @@ public class BakedLighting : Application
     {
         // Execute base class startup
         base.Start();
+        _sampleInput = new SampleInputMap(movement: true);
+        _sampleInput.AddButton("Boost", Scancode.LeftShift, ControllerButton.RightShoulder, "RUN");
+        _sampleInput.Map.MapKeyboardKey("Boost", Scancode.RightShift);
+        _sampleInput.AddButton("Textures", Scancode.Tab, ControllerButton.Y, "TEXTURE", 1);
+        _sampleInput.Map.MapControllerAxis("LookX", ControllerAxis.RightX, 0.0f, 1.0f);
+        _sampleInput.Map.MapControllerAxis("LookY", ControllerAxis.RightY, 0.0f, 1.0f);
         // Create the UI content
         CreateInstructions();
 
@@ -159,7 +165,7 @@ public class BakedLighting : Application
     /// <summary>Handle application update. Set controls to character.</summary>
     protected override void Update(float timeStep)
     {
-        if (Input.ExitRequested || Input.GetKeyPress(Key.Escape))
+        if (Input.ExitRequested || _sampleInput!.Pressed("Exit"))
         {
             Exit();
             return;
@@ -170,8 +176,10 @@ public class BakedLighting : Application
         // Update camera rotation
         const float rotationSensitivity = 0.1f;
         var mouseMove = Input.GetMouseMove();
-        _yaw = MathDefs.Mod(_yaw + mouseMove.X * rotationSensitivity, 360.0f);
-        _pitch = MathDefs.Clamp(_pitch + mouseMove.Y * rotationSensitivity, -89.0f, 89.0f);
+        _yaw = MathDefs.Mod(_yaw + mouseMove.X * rotationSensitivity +
+            _sampleInput.Evaluate("LookX") * timeStep * 120.0f, 360.0f);
+        _pitch = MathDefs.Clamp(_pitch + mouseMove.Y * rotationSensitivity +
+            _sampleInput.Evaluate("LookY") * timeStep * 120.0f, -89.0f, 89.0f);
 
         _cameraRotationPitch!.SetRotation(new Quaternion(_pitch, 0.0f, 0.0f));
         _cameraRotationYaw!.SetRotation(new Quaternion(0.0f, _yaw, 0.0f));
@@ -179,17 +187,13 @@ public class BakedLighting : Application
         // Apply movement
         var rotation = _cameraRotationYaw!.WorldRotation;
         var controlDirection = Vector3f.Zero;
-        if (Input.GetKeyDown(Key.W))
-            controlDirection += Vector3f.Forward;
-        if (Input.GetKeyDown(Key.S))
-            controlDirection += Vector3f.Back;
-        if (Input.GetKeyDown(Key.A))
-            controlDirection += Vector3f.Left;
-        if (Input.GetKeyDown(Key.D))
-            controlDirection += Vector3f.Right;
+        controlDirection += Vector3f.Forward * _sampleInput.Evaluate("Forward");
+        controlDirection += Vector3f.Back * _sampleInput.Evaluate("Back");
+        controlDirection += Vector3f.Left * _sampleInput.Evaluate("Left");
+        controlDirection += Vector3f.Right * _sampleInput.Evaluate("Right");
 
         var movementDirection = rotation * controlDirection;
-        var movementSpeed = Input.GetKeyDown(Key.Shift) ? 5.0f : 2.0f;
+        var movementSpeed = _sampleInput.Evaluate("Boost") > 0.0f ? 5.0f : 2.0f;
         var velocity = movementSpeed * movementDirection;
         _actorNode!.Translate(velocity * timeStep, TransformSpace.World);
 
@@ -210,7 +214,7 @@ public class BakedLighting : Application
             animController.PlayExistingExclusive(new AnimationParameters(idleAnimation).Looped(), 0.2f);
 
         // Toggle textures
-        if (Input.GetKeyPress(Key.Tab))
+        if (_sampleInput.Pressed("Textures"))
             ToggleTextures();
     }
 
@@ -227,6 +231,8 @@ public class BakedLighting : Application
 
     protected override void Stop()
     {
+        _sampleInput?.Dispose();
+        _sampleInput = null;
         Renderer.SetNumViewports(0);
         _viewport?.Dispose();
         _viewport = null;
@@ -316,5 +322,6 @@ public class BakedLighting : Application
     private bool _texturesEnabled = true;
     private Texture2D[]? _controlPrompts;
     private MultitouchAdapter? _multitouchAdapter;
+    private SampleInputMap? _sampleInput;
     private static readonly Vector2f PromptIconSize = new(24.0f, 24.0f);
 }
