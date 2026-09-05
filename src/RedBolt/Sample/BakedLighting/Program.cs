@@ -117,7 +117,8 @@ public class BakedLighting : Application
             Resources.Get<Texture2D>("ThirdParty/KenneyInputPrompts/keyboard_d.png"),
             Resources.Get<Texture2D>("ThirdParty/KenneyInputPrompts/mouse_move.png"),
             Resources.Get<Texture2D>("ThirdParty/KenneyInputPrompts/keyboard_shift.png"),
-            Resources.Get<Texture2D>("ThirdParty/KenneyInputPrompts/keyboard_tab.png")
+            Resources.Get<Texture2D>("ThirdParty/KenneyInputPrompts/keyboard_tab.png"),
+            Resources.Get<Texture2D>("ThirdParty/KenneyInputPrompts/touch_swipe_move.png")
         ];
 
         // Construct new Text object, set string to display and font to use
@@ -175,10 +176,13 @@ public class BakedLighting : Application
 
         // Update camera rotation
         const float rotationSensitivity = 0.1f;
-        var mouseMove = Input.GetMouseMove();
-        _yaw = MathDefs.Mod(_yaw + mouseMove.X * rotationSensitivity +
+        var mouseMove = Input.ActiveInputDevice == InputDeviceType.Touch
+            ? Vector2i.Zero
+            : Input.GetMouseMove();
+        var look = new Vector2f(mouseMove.X, mouseMove.Y) * rotationSensitivity;
+        _yaw = MathDefs.Mod(_yaw + look.X +
             _sampleInput.Evaluate("LookX") * timeStep * 120.0f, 360.0f);
-        _pitch = MathDefs.Clamp(_pitch + mouseMove.Y * rotationSensitivity +
+        _pitch = MathDefs.Clamp(_pitch + look.Y +
             _sampleInput.Evaluate("LookY") * timeStep * 120.0f, -89.0f, 89.0f);
 
         _cameraRotationPitch!.SetRotation(new Quaternion(_pitch, 0.0f, 0.0f));
@@ -191,6 +195,8 @@ public class BakedLighting : Application
         controlDirection += Vector3f.Back * _sampleInput.Evaluate("Back");
         controlDirection += Vector3f.Left * _sampleInput.Evaluate("Left");
         controlDirection += Vector3f.Right * _sampleInput.Evaluate("Right");
+        if (controlDirection.LengthSquared > 1.0f)
+            controlDirection.Normalize();
 
         var movementDirection = rotation * controlDirection;
         var movementSpeed = _sampleInput.Evaluate("Boost") > 0.0f ? 5.0f : 2.0f;
@@ -253,15 +259,31 @@ public class BakedLighting : Application
         if (ImGui.Begin("Baked Lighting"u8, ref windowOpen,
             ImGuiWindowFlags.ImGuiWindowFlagsNoResize | ImGuiWindowFlags.ImGuiWindowFlagsNoSavedSettings))
         {
-            for (var i = 0; i < 3; ++i)
+            if (Input.ActiveInputDevice == InputDeviceType.KeyboardMouse)
             {
-                ImGui.Image(_controlPrompts![i], PromptIconSize);
-                ImGui.SameLine();
+                for (var i = 0; i < 3; ++i)
+                {
+                    ImGui.Image(_controlPrompts![i], PromptIconSize);
+                    ImGui.SameLine();
+                }
+                DrawPrompt(_controlPrompts![3], "Move"u8);
+                DrawPrompt(_controlPrompts[4], "Look / wheel zoom"u8);
+                DrawPrompt(_controlPrompts[5], "Sprint"u8);
+                DrawPrompt(_controlPrompts[6], "Toggle character textures"u8);
             }
-            DrawPrompt(_controlPrompts![3], "Move"u8);
-            DrawPrompt(_controlPrompts[4], "Look / wheel zoom"u8);
-            DrawPrompt(_controlPrompts[5], "Sprint"u8);
-            DrawPrompt(_controlPrompts[6], "Toggle character textures"u8);
+            else
+            {
+                DrawPrompt(Input.ActiveInputDevice == InputDeviceType.Touch
+                    ? SampleInputMap.GetMovementPrompt()
+                    : SampleInputMap.GetControllerPrompt(ControllerButton.LeftStick),
+                    Input.ActiveInputDevice == InputDeviceType.Touch ? "Drag left side to move"u8 : "Move"u8);
+                DrawPrompt(Input.ActiveInputDevice == InputDeviceType.Touch
+                    ? _controlPrompts![7]
+                    : SampleInputMap.GetControllerPrompt(ControllerButton.RightStick),
+                    Input.ActiveInputDevice == InputDeviceType.Touch ? "Swipe right side to look"u8 : "Look"u8);
+                DrawPrompt(SampleInputMap.GetControllerPrompt(ControllerButton.RightShoulder), "Sprint"u8);
+                DrawPrompt(SampleInputMap.GetControllerPrompt(ControllerButton.Y), "Toggle character textures"u8);
+            }
             if (ImGui.Button("Zoom in"u8))
                 ZoomCamera(0.75f);
             ImGui.SameLine();
