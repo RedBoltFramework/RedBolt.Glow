@@ -135,10 +135,10 @@ target_include_directories(redbolt-glow-native-embree PRIVATE
     "${REDBOLT_EMBREE_BUILD_INCLUDE_DIR}")
 
 file(GENERATE
-    OUTPUT "${REDBOLT_GENERATED_ROOT}/native-modules/$<CONFIG>/XATLAS.json"
+    OUTPUT "${REDBOLT_GENERATED_ROOT}/native-modules/XATLAS.json"
     CONTENT "{\n  \"module\": \"XATLAS\",\n  \"managedSelector\": \"RedBolt.Bindings.XAtlas\",\n  \"nativeLibrary\": \"RedBolt.Native.XAtlas\",\n  \"requires\": [],\n  \"requirementClosure\": [],\n  \"artifacts\": [\"$<TARGET_FILE_NAME:redbolt-glow-native-xatlas>\"]\n}\n")
 file(GENERATE
-    OUTPUT "${REDBOLT_GENERATED_ROOT}/native-modules/$<CONFIG>/EMBREE.json"
+    OUTPUT "${REDBOLT_GENERATED_ROOT}/native-modules/EMBREE.json"
     CONTENT "{\n  \"module\": \"EMBREE\",\n  \"managedSelector\": \"RedBolt.Bindings.Embree\",\n  \"nativeLibrary\": \"RedBolt.Native.Embree\",\n  \"requires\": [],\n  \"requirementClosure\": [],\n  \"artifacts\": [\"$<TARGET_FILE_NAME:redbolt-glow-native-embree>\"]\n}\n")
 
 add_custom_target(redbolt-glow-native-all DEPENDS

@@ -4,14 +4,33 @@
   "configurePresets": [
     {
       "name": "linux-x64",
-      "generator": "Ninja Multi-Config",
-      "binaryDir": "${sourceDir}/build/native/${presetName}"
+      "generator": "Ninja",
+      "binaryDir": "${sourceDir}/build/native/${presetName}",
+      "cacheVariables": { "CMAKE_BUILD_TYPE": "Debug" }
+    },
+    {
+      "name": "linux-x64-release",
+      "generator": "Ninja",
+      "binaryDir": "${sourceDir}/build/native/${presetName}",
+      "cacheVariables": { "CMAKE_BUILD_TYPE": "Release" }
     },
     {
       "name": "win-x64",
-      "generator": "Ninja Multi-Config",
+      "generator": "Ninja",
       "binaryDir": "${sourceDir}/build/native/${presetName}",
-      "cacheVariables": { "CMAKE_TOOLCHAIN_FILE": "${sourceDir}/../RedBolt/cmake/Toolchains/MinGW-x86_64.cmake" }
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Debug",
+        "CMAKE_TOOLCHAIN_FILE": "${sourceDir}/../RedBolt/cmake/Toolchains/MinGW-x86_64.cmake"
+      }
+    },
+    {
+      "name": "win-x64-release",
+      "generator": "Ninja",
+      "binaryDir": "${sourceDir}/build/native/${presetName}",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Release",
+        "CMAKE_TOOLCHAIN_FILE": "${sourceDir}/../RedBolt/cmake/Toolchains/MinGW-x86_64.cmake"
+      }
     }
   ]
 }
