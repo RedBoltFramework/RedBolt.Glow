@@ -5,6 +5,7 @@
   "android": true,
   "native": true,
   "webNative": false,
+  "androidNative": false,
   "projectReferences": [
     "../RedBolt/src/RedBolt/DearImGui/RedBolt.DearImGui.csproj"
   ],
