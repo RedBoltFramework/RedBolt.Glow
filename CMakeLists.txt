@@ -61,6 +61,7 @@ include("${REDBOLT_ROOT}/cmake/CPM.cmake")
 set(FETCHCONTENT_BASE_DIR "${CMAKE_BINARY_DIR}/deps")
 
 include("${REDBOLT_ROOT}/cmake/RedBoltSharpCpp.cmake")
+include("${REDBOLT_ROOT}/cmake/RedBoltNativeModuleManifest.cmake")
 include(extern/XAtlas.cmake)
 include(extern/Embree.cmake)
 
@@ -134,13 +135,24 @@ target_include_directories(redbolt-glow-native-embree PRIVATE
     "${REDBOLT_EMBREE_INCLUDE_DIR}"
     "${REDBOLT_EMBREE_BUILD_INCLUDE_DIR}")
 
-file(GENERATE
-    OUTPUT "${REDBOLT_GENERATED_ROOT}/native-modules/XATLAS.json"
-    CONTENT "{\n  \"module\": \"XATLAS\",\n  \"managedSelector\": \"RedBolt.Bindings.XAtlas\",\n  \"nativeLibrary\": \"RedBolt.Native.XAtlas\",\n  \"requires\": [],\n  \"requirementClosure\": [],\n  \"artifacts\": [\"$<TARGET_FILE_NAME:redbolt-glow-native-xatlas>\"]\n}\n")
-file(GENERATE
-    OUTPUT "${REDBOLT_GENERATED_ROOT}/native-modules/EMBREE.json"
-    CONTENT "{\n  \"module\": \"EMBREE\",\n  \"managedSelector\": \"RedBolt.Bindings.Embree\",\n  \"nativeLibrary\": \"RedBolt.Native.Embree\",\n  \"requires\": [],\n  \"requirementClosure\": [],\n  \"artifacts\": [\"$<TARGET_FILE_NAME:redbolt-glow-native-embree>\"]\n}\n")
+redbolt_write_native_module_manifest(
+    MODULE XATLAS
+    TARGET redbolt-glow-native-xatlas
+    SELECTOR RedBolt.Bindings.XAtlas
+    LIBRARY_NAME "${REDBOLT_XATLAS_NATIVE_LIBRARY_NAME}"
+    OUTPUT_DIR "${REDBOLT_GENERATED_ROOT}/native-modules")
+redbolt_write_native_module_manifest(
+    MODULE EMBREE
+    TARGET redbolt-glow-native-embree
+    SELECTOR RedBolt.Bindings.Embree
+    LIBRARY_NAME "${REDBOLT_EMBREE_NATIVE_LIBRARY_NAME}"
+    OUTPUT_DIR "${REDBOLT_GENERATED_ROOT}/native-modules")
 
 add_custom_target(redbolt-glow-native-all DEPENDS
     redbolt-glow-native-xatlas
     redbolt-glow-native-embree)
+if(NOT EMSCRIPTEN)
+    add_dependencies(redbolt-glow-native-all
+        redbolt-glow-native-xatlas-module
+        redbolt-glow-native-embree-module)
+endif()

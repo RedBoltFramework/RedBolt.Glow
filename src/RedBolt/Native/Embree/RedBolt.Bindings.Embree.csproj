@@ -10,7 +10,7 @@ For a copy, see <https://opensource.org/licenses/MIT> or the accompanying LICENS
     <EnableLibraryImportGenerator>true</EnableLibraryImportGenerator>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <DisableRuntimeMarshalling>true</DisableRuntimeMarshalling>
-    <RedBoltExternalCMakeTarget>redbolt-glow-native-embree</RedBoltExternalCMakeTarget>
+    <RedBoltExternalCMakeTarget>redbolt-glow-native-embree-module</RedBoltExternalCMakeTarget>
     <RedBoltExternalBindingsSubdirectory>embree</RedBoltExternalBindingsSubdirectory>
     <RedBoltExternalBindingsProjectName>RedBolt.Bindings.Embree</RedBoltExternalBindingsProjectName>
   </PropertyGroup>
