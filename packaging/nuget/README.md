@@ -1,6 +1,6 @@
 # RedBolt.Glow NuGet packages
 
-RedBolt.Glow versions independently from RedBolt, while recording exact dependencies on the base RedBolt package version used for the build. Produce the matching base packages first in `<build root>/package/nuget/RedBolt/out` (`<build root>` is the monorepo `build/` inside the monorepo and the repository's own `build/` standalone; `REDBOLT_BUILD_ROOT` overrides it).
+RedBolt.Glow versions independently from RedBolt, while recording exact dependencies on the base RedBolt package version used for the build. Produce the matching base packages first in `<build root>/package/nuget/RedBolt/out` (`<build root>` is the `build/` directory beside the engine directory; the packaging script reads `REDBOLT_BUILD_ROOT` to override it).
 
 Create the module packages with:
 
