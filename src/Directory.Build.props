@@ -20,8 +20,6 @@ For a copy, see <https://opensource.org/licenses/MIT> or the accompanying LICENS
     <RedBoltAndroidSupported>false</RedBoltAndroidSupported>
     <RedBoltExternalNativeTargetPrefix>redbolt-glow</RedBoltExternalNativeTargetPrefix>
     <RedBoltExternalEnabledNativeModules>GLOW</RedBoltExternalEnabledNativeModules>
-    <RedBoltExternalDesktopResourceRoot>$(RedBoltGlowRoot)</RedBoltExternalDesktopResourceRoot>
-    <RedBoltExternalDesktopResourceName>Glow</RedBoltExternalDesktopResourceName>
   </PropertyGroup>
   <Import Project="$(RedBoltRoot)/eng/RedBolt.ModuleBuild/Directory.Build.props" />
 </Project>
